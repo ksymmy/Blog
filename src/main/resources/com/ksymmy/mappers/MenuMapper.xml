@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="com.ksymmy.dao.MenuDao">
+    <resultMap id="MenuResult" type="Menu">
+        <result property="id" column="id"/>
+        <result property="fid" column="fid"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+        <result property="icons" column="icons"/>
+        <result property="xh" column="xh"/>
+        <result property="createDate" column="createDate"/>
+        <result property="state" column="state"/>
+       <!-- <association property="fid" column="fid" select="com.ksymmy.dao.MenuDao.findById"/>-->
+        <association property="blogger" column="bloggerId" select="com.ksymmy.dao.BloggerDao.findById"/>
+    </resultMap>
+
+    <insert id="add" parameterType="Menu">
+        INSERT INTO T_MENU (ID,FID,NAME,URL,ICONS,XH,BLOGGERID,CREATEDATE,STATE) VALUES (null,#{fid},#{name},#{url},#{icons},#{xh},#{blogger.id},#{createDate},1)
+    </insert>
+
+    <update id="update" parameterType="Menu">
+        update t_menu
+        <set>
+            <if test="name!=null">name = #{name},</if>
+            <if test="url!=null">url = #{url},</if>
+            <if test="fid!=null">fid = #{fid},</if>
+            <if test="icons!=null">icons = #{icons},</if>
+            <if test="xh!=null">xh = #{xh},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from t_menu where id = #{id}
+    </delete>
+
+    <select id="getTotal" parameterType="Map" resultType="Long">
+        select count(1) from t_menu
+        <where>
+            <if test="id!=null">and fid = #{id}</if>
+            <if test="name!=null">name = #{name}</if>
+            <if test="bloggerId!=null">name = #{bloggerId}</if>
+        </where>
+    </select>
+
+    <select id="findById" parameterType="Integer" resultMap="MenuResult">
+        select * from t_menu where id = #{id}
+    </select>
+
+    <select id="list" parameterType="Map" resultMap="MenuResult">
+        select * from t_menu
+        <where>
+            <if test="id!=null">and fid = #{id}</if>
+            <if test="name!=null">and name = #{name}</if>
+            <if test="bloggerId!=null">and bloggerId = #{bloggerId}</if>
+        </where>
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+</mapper>
