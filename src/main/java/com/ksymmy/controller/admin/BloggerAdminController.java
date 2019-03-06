@@ -128,7 +128,8 @@ public class BloggerAdminController {
      */
     @RequestMapping("/modifyPassword")
     public String modifyPassword(String newPassword, HttpServletResponse response) throws Exception {
-        Blogger blogger = new Blogger();
+//        Blogger blogger = new Blogger();
+        Blogger blogger = bloggerService.find(1);
         blogger.setPassword(CryptographyUtil.md5(newPassword, "salt"));
         int resultTotal = bloggerService.update(blogger);
         JSONObject result = new JSONObject();

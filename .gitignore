@@ -1,9 +1,11 @@
 # Compiled class file
 *.class
 
+# custom ignore
 .idea*
 *.iml
 target*
+src/main/webapp/static/userImages*
 
 # Log file
 *.log
